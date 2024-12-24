@@ -1,5 +1,6 @@
 package dev.openhands.currencymod.block;
 
+import com.mojang.serialization.MapCodec;
 import dev.openhands.currencymod.CurrencyMod;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
@@ -67,7 +68,7 @@ public class CurrencyGeneratorBlock extends BlockWithEntity {
     }
 
     @Override
-    public BlockEntityType<? extends BlockEntity> getCodec() {
-        return CurrencyMod.CURRENCY_GENERATOR_ENTITY;
+    public MapCodec<? extends BlockWithEntity> getCodec() {
+        return Block.createCodec(properties -> new CurrencyGeneratorBlock(properties));
     }
 }
