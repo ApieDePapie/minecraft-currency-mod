@@ -1,5 +1,6 @@
 package dev.openhands.currencymod.block;
 
+import dev.openhands.currencymod.CurrencyMod;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -63,5 +64,10 @@ public class CurrencyGeneratorBlock extends BlockWithEntity {
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
         return validateTicker(type, CurrencyMod.CURRENCY_GENERATOR_ENTITY,
             (world1, pos, state1, be) -> CurrencyGeneratorBlockEntity.tick(world1, pos, state1, be));
+    }
+
+    @Override
+    public BlockEntityType<? extends BlockEntity> getCodec() {
+        return CurrencyMod.CURRENCY_GENERATOR_ENTITY;
     }
 }

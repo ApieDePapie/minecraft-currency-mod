@@ -1,6 +1,7 @@
 package dev.openhands.currencymod.data;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.PersistentState.Type;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.PersistentState;
@@ -105,8 +106,7 @@ public class PlayerCurrencyData extends PersistentState {
     public static PlayerCurrencyData getServerState(World world) {
         return world.getServer().getOverworld().getPersistentStateManager()
             .getOrCreate(
-                PlayerCurrencyData::createFromNbt,
-                PlayerCurrencyData::new,
+                Type.create(PlayerCurrencyData::createFromNbt, PlayerCurrencyData::new),
                 "currency_data"
             );
     }
