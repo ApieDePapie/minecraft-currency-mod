@@ -1,0 +1,38 @@
+{
+        "schemaVersion": 1,
+        "id": "currencymod",
+        "version": "${version}",
+        "name": "Currency Mod",
+        "description": "A mod that adds a currency system with passive income, upgrades, and machines!",
+        "authors": [
+                "OpenHands"
+        ],
+        "contact": {
+                "homepage": "https://github.com/openhands",
+                "sources": "https://github.com/openhands/currency-mod"
+        },
+        "license": "MIT",
+        "icon": "assets/currencymod/icon.png",
+        "environment": "*",
+        "entrypoints": {
+                "main": [
+                        "dev.openhands.currencymod.CurrencyMod"
+                ],
+                "client": [
+                        "dev.openhands.currencymod.client.CurrencyModClient"
+                ]
+        },
+        "mixins": [
+                "currencymod.mixins.json",
+                {
+                        "config": "currencymod.client.mixins.json",
+                        "environment": "client"
+                }
+        ],
+        "depends": {
+                "fabricloader": ">=0.15.3",
+                "minecraft": "~1.20.4",
+                "java": ">=17",
+                "fabric-api": "*"
+        }
+}
