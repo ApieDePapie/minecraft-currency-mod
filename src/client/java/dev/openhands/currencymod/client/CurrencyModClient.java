@@ -1,9 +1,11 @@
 package dev.openhands.currencymod.client;
 
 import dev.openhands.currencymod.CurrencyMod;
+import dev.openhands.currencymod.network.CurrencyUpdateS2CPacket;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -41,6 +43,9 @@ public class CurrencyModClient implements ClientModInitializer {
                 }
             }
         });
+        
+        // Register network handler for currency updates
+        ClientPlayNetworking.registerGlobalReceiver(CurrencyMod.CURRENCY_UPDATE, CurrencyUpdateS2CPacket::receive);
     }
     
     private void renderCurrencyHud(DrawContext context, float tickDelta) {
