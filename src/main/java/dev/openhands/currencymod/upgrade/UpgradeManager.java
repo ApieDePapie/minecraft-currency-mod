@@ -1,15 +1,14 @@
 package dev.openhands.currencymod.upgrade;
 
 import dev.openhands.currencymod.CurrencyMod;
+import dev.openhands.currencymod.data.PlayerCurrencyData;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.NbtCompound;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class UpgradeManager {
     private static final Map<String, Upgrade> UPGRADES = new HashMap<>();
-    private static final String UPGRADES_KEY = "upgrades";
     
     static {
         // Register default upgrades
@@ -43,8 +42,7 @@ public class UpgradeManager {
     }
     
     public static int getUpgradeLevel(PlayerEntity player, String upgradeId) {
-        NbtCompound upgradesData = getUpgradesData(player);
-        return upgradesData.getInt(upgradeId);
+        return PlayerCurrencyData.getServerState(player.getWorld()).getUpgradeLevel(player, upgradeId);
     }
     
     public static boolean purchaseUpgrade(PlayerEntity player, String upgradeId) {
@@ -55,8 +53,8 @@ public class UpgradeManager {
         float cost = upgrade.getCostForLevel(currentLevel);
         
         if (CurrencyMod.spendPlayerCurrency(player, cost)) {
-            NbtCompound upgradesData = getUpgradesData(player);
-            upgradesData.putInt(upgradeId, currentLevel + 1);
+            PlayerCurrencyData.getServerState(player.getWorld())
+                .setUpgradeLevel(player, upgradeId, currentLevel + 1);
             return true;
         }
         
@@ -73,14 +71,6 @@ public class UpgradeManager {
         Upgrade offlineUpgrade = getUpgrade("offline_earnings");
         int level = getUpgradeLevel(player, "offline_earnings");
         return offlineUpgrade.getEffectForLevel(level);
-    }
-    
-    private static NbtCompound getUpgradesData(PlayerEntity player) {
-        NbtCompound persistentData = player.getPersistentData();
-        if (!persistentData.contains(UPGRADES_KEY)) {
-            persistentData.put(UPGRADES_KEY, new NbtCompound());
-        }
-        return persistentData.getCompound(UPGRADES_KEY);
     }
     
     public static Map<String, Upgrade> getUpgrades() {
