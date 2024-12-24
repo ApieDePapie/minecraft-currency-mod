@@ -87,9 +87,7 @@ public class CurrencyMod implements ModInitializer {
             
             // Send currency update to client
             if (player instanceof ServerPlayerEntity serverPlayer) {
-                var buf = PacketByteBufs.create();
-                buf.writeFloat(currentCurrency);
-                ServerPlayNetworking.send(serverPlayer, CURRENCY_UPDATE, buf);
+                CurrencyUpdatePacket.send(serverPlayer, currentCurrency);
             }
         }
     }
@@ -112,9 +110,7 @@ public class CurrencyMod implements ModInitializer {
             
             // Send currency update to client
             if (player instanceof ServerPlayerEntity serverPlayer) {
-                var buf = PacketByteBufs.create();
-                buf.writeFloat(amount);
-                ServerPlayNetworking.send(serverPlayer, CURRENCY_UPDATE, buf);
+                CurrencyUpdatePacket.send(serverPlayer, amount);
             }
         }
     }

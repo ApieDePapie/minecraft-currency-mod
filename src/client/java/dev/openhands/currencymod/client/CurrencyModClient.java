@@ -1,7 +1,7 @@
 package dev.openhands.currencymod.client;
 
 import dev.openhands.currencymod.CurrencyMod;
-import dev.openhands.currencymod.network.CurrencyUpdateS2CPacket;
+import dev.openhands.currencymod.client.network.CurrencyUpdateS2CPacket;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;

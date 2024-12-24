@@ -1,4 +1,4 @@
-package dev.openhands.currencymod.network;
+package dev.openhands.currencymod.client.network;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.network.PacketByteBuf;
