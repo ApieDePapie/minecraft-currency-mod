@@ -1,6 +1,7 @@
 package dev.openhands.currencymod;
 
 import dev.openhands.currencymod.block.CurrencyGeneratorBlock;
+import dev.openhands.currencymod.network.CurrencyUpdatePacket;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.util.Identifier;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -27,7 +28,6 @@ import org.slf4j.LoggerFactory;
 public class CurrencyMod implements ModInitializer {
     public static final String MOD_ID = "currencymod";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-    public static final Identifier CURRENCY_UPDATE = new Identifier(MOD_ID, "currency_update");
     
     private static final float BASE_CURRENCY_PER_TICK = 0.001f; // Base currency earned per tick
     
@@ -88,8 +88,8 @@ public class CurrencyMod implements ModInitializer {
             // Send currency update to client
             if (player instanceof ServerPlayerEntity serverPlayer) {
                 var buf = PacketByteBufs.create();
-                buf.writeFloat(currentCurrency);
-                ServerPlayNetworking.send(serverPlayer, CURRENCY_UPDATE, buf);
+                CurrencyUpdatePacket.write(buf, currentCurrency);
+                ServerPlayNetworking.send(serverPlayer, CurrencyUpdatePacket.ID, buf);
             }
         }
     }
