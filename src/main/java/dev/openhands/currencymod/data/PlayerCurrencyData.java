@@ -1,5 +1,6 @@
 package dev.openhands.currencymod.data;
 
+import net.minecraft.datafixer.DataFixTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.PersistentState.Type;
 import net.minecraft.nbt.NbtCompound;
@@ -103,11 +104,17 @@ public class PlayerCurrencyData extends PersistentState {
         markDirty();
     }
 
+    private static final Type<PlayerCurrencyData> TYPE = new Type<>(
+        (nbt) -> createFromNbt((NbtCompound) nbt),
+        PlayerCurrencyData::new,
+        DataFixTypes.LEVEL
+    );
+
     public static PlayerCurrencyData getServerState(World world) {
+        if (world.isClient()) {
+            return null;
+        }
         return world.getServer().getOverworld().getPersistentStateManager()
-            .getOrCreate(
-                Type.create(PlayerCurrencyData::createFromNbt, PlayerCurrencyData::new),
-                "currency_data"
-            );
+            .getOrCreate(TYPE, "currency_data");
     }
 }

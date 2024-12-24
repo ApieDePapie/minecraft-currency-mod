@@ -42,19 +42,29 @@ public class UpgradeManager {
     }
     
     public static int getUpgradeLevel(PlayerEntity player, String upgradeId) {
-        return PlayerCurrencyData.getServerState(player.getWorld()).getUpgradeLevel(player, upgradeId);
+        if (player.getWorld().isClient()) {
+            return 0; // Return default level on client side
+        }
+        PlayerCurrencyData data = PlayerCurrencyData.getServerState(player.getWorld());
+        return data != null ? data.getUpgradeLevel(player, upgradeId) : 0;
     }
     
     public static boolean purchaseUpgrade(PlayerEntity player, String upgradeId) {
+        if (player.getWorld().isClient()) {
+            return false; // Cannot purchase upgrades on client side
+        }
+        
         Upgrade upgrade = getUpgrade(upgradeId);
         if (upgrade == null) return false;
+        
+        PlayerCurrencyData data = PlayerCurrencyData.getServerState(player.getWorld());
+        if (data == null) return false;
         
         int currentLevel = getUpgradeLevel(player, upgradeId);
         float cost = upgrade.getCostForLevel(currentLevel);
         
         if (CurrencyMod.spendPlayerCurrency(player, cost)) {
-            PlayerCurrencyData.getServerState(player.getWorld())
-                .setUpgradeLevel(player, upgradeId, currentLevel + 1);
+            data.setUpgradeLevel(player, upgradeId, currentLevel + 1);
             return true;
         }
         
@@ -62,13 +72,21 @@ public class UpgradeManager {
     }
     
     public static float getTotalIncomeMultiplier(PlayerEntity player) {
+        if (player.getWorld().isClient()) {
+            return 1.0f; // Return base multiplier on client side
+        }
         Upgrade incomeUpgrade = getUpgrade("income_multiplier");
+        if (incomeUpgrade == null) return 1.0f;
         int level = getUpgradeLevel(player, "income_multiplier");
         return 1.0f + incomeUpgrade.getEffectForLevel(level);
     }
     
     public static float getOfflineEarningsRate(PlayerEntity player) {
+        if (player.getWorld().isClient()) {
+            return 0.0f; // Return no offline earnings on client side
+        }
         Upgrade offlineUpgrade = getUpgrade("offline_earnings");
+        if (offlineUpgrade == null) return 0.0f;
         int level = getUpgradeLevel(player, "offline_earnings");
         return offlineUpgrade.getEffectForLevel(level);
     }
