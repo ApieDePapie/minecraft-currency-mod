@@ -52,7 +52,7 @@ public class CurrencyModClient implements ClientModInitializer {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.player == null) return;
         
-        float currency = CurrencyMod.getPlayerCurrency(client.player);
+        float currency = CurrencyUpdateS2CPacket.getLastKnownCurrency();
         String currencyText = String.format("%.2f", currency);
         
         int screenWidth = client.getWindow().getScaledWidth();

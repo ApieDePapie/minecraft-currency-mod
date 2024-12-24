@@ -9,6 +9,7 @@ public class CurrencyUpdateS2CPacket {
     private static float lastKnownCurrency = 0.0f;
 
     public static void receive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+        if (client == null || client.player == null) return;
         float currency = buf.readFloat();
         lastKnownCurrency = currency;
     }
